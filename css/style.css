@@ -103,8 +103,8 @@ img {
 .section-movies {
   background: white;
   position: relative;
-
   padding: 3rem 2rem;
+
 }
 
 .watch-icon-container {
@@ -112,11 +112,16 @@ img {
   justify-content: center;
   align-items: center;
   height: 100%;
-  display: none;
+  padding:10rem;
+
 }
 .watch-icon {
   font-size: 5rem;
   color: #dfdddd;
+}
+
+.movies-container {
+    display: none;
 }
 
 .movie {
