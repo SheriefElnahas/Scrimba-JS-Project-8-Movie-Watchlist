@@ -4,6 +4,7 @@ const searchInput = document.querySelector(".search-input");
 const searchBtn = document.querySelector(".search-btn");
 const moviesContainer = document.querySelector(".movies-container");
 const watchIconContainer = document.querySelector(".watch-icon-container");
+const errorMessage = document.querySelector('.error-message');
 
 let moviesHTML = "";
 
@@ -28,9 +29,10 @@ async function getMovieId(movieName) {
 
   // Avoid Too many results error & Movie Not Found
   if (movies.Response !== "False") {
-    // Hide the icon and dispaly the movies container
+    // Hide the icon - Error -  and dispaly the movies container
     watchIconContainer.style.display = "none";
     moviesContainer.style.display = "block";
+    errorMessage.style.display = 'none';
 
     // Only loop if there is more than 1 movie
     if (movies.Search.length > 1) {
@@ -42,6 +44,17 @@ async function getMovieId(movieName) {
     } else if (movies.Search.length === 1) {
       getMoviesBasedOnMovieId(movies.Search[0].imdbID);
     }
+  } else if(movies.Error) {
+    // Hide Watch - movies continer And Show Error Message And Change Input Value
+    watchIconContainer.style.display = 'none';
+    moviesContainer.style.display = 'none';
+    errorMessage.style.display = 'block';
+    
+
+    // Clear the input and update the placeholder
+    searchInput.value = '';
+    searchInput.placeholder = 'Searching something with no data';
+
   }
 }
 

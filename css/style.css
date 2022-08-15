@@ -113,15 +113,26 @@ img {
   align-items: center;
   height: 100%;
   padding:10rem;
+  display:block;
+
 
 }
 .watch-icon {
   font-size: 5rem;
   color: #dfdddd;
+
 }
 
-.movies-container {
-    display: none;
+
+.error-message {
+    text-align: center;
+    font-weight: 700;
+    font-size:18px;
+    color:#DFDDDD;
+    padding:10rem 0;
+    width:80%;
+    margin:0 auto;
+    display:none;
 }
 
 .movie {
