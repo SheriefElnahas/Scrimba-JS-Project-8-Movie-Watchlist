@@ -11,16 +11,28 @@
 </head>
 <body>
     <div class="project-container">
-        <header class="header">
+        <header class="search-header">
             <div class="header-image">
                 <div class="header-content">
                     <h1 class="header-heading">Find Your Film</h1>
-                    <a class="header-link" href="#">My Watchlist</a>
+                    <a class="header-link" id="go-to-watchlist" href="#">My Watchlist</a>
                 </div>
 
             </div>
  
         </header>
+
+        <header class="watchlist-header">
+            <div class="header-image">
+                <div class="header-content">
+                    <h1 class="header-heading">My Watchlist</h1>
+                    <a class="header-link" id="go-to-search" href="#">Search For Movies</a>
+                </div>
+
+            </div>
+        </header>
+
+   
    
         <section class="section-movies">
             <form class="search">
@@ -33,6 +45,10 @@
      
             </div>
             <p class="error-message">Unable to find what you’re looking for. Please try another search.</p>
+            <div class="watchlist-content">
+                <p class="watchlist-paragraph">  Your watchlist is looking a little empty...     </p>
+                <a class="watchlist-link" href="index.html"><i class="fa-solid fa-circle-plus plus-icon"></i>Let's add some movies!</a>
+            </div>
             <div class="movies-container">
 
                 <!-- <div class="movie">
@@ -49,10 +65,9 @@
                     </div>
                 </div> -->
 
-              
-
-              
-              
+            </div>
+            <div class="watchlist-container">
+                
             </div>
         </section>
   

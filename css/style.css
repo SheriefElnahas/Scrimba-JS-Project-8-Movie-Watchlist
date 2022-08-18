@@ -15,9 +15,11 @@ body {
 
   margin: 2rem auto;
 }
-button,
-a {
+button, a{
   cursor: pointer;
+}
+a {
+    text-decoration: none;
 }
 
 img {
@@ -45,7 +47,7 @@ img {
 }
 .header-link {
   color: #fff;
-  text-decoration: none;
+
   font-size: 14px;
   font-weight: 700;
 }
@@ -58,6 +60,7 @@ img {
   position: absolute;
   top: -20px;
   left: 50px;
+
 }
 .search-icon {
   color: #9ca3af;
@@ -112,7 +115,7 @@ img {
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding:10rem;
+  padding:10rem 13rem;
   display:block;
 
 
@@ -190,4 +193,36 @@ img {
   color: #6b7280;
   font-weight: 400;
   line-height: 20px;
+}
+
+
+/* watchlist */
+.watchlist-header {
+  display:none;
+}
+.watchlist-content {
+    text-align: center;
+
+    padding:10rem 0;
+    font-weight: 700;
+    color:#DFDDDD;
+    display:none;
+   
+
+
+}
+
+.watchlist-paragraph {
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+.watchlist-link {
+    color: #363636;
+    font-size:14px;
+}
+
+.watchlist-link i {
+    margin-right:0.6rem;
+    font-size:16px;
 }
