@@ -50,6 +50,13 @@ img {
 
   font-size: 14px;
   font-weight: 700;
+  border:2px solid white;
+  padding:0.5rem 1rem;
+  transition: 0.3s all;
+}
+.header-link:hover {
+  background:#fff;
+  color:black;
 }
 
 /* Search */
@@ -136,6 +143,20 @@ img {
     width:80%;
     margin:0 auto;
     display:none;
+}
+
+.alert {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size:12px;
+  letter-spacing: 1px;
+  background:orange;
+  width:40%;
+  margin:0 auto;
+  padding:0.3rem;
+  border-radius: 10px;
+  visibility: hidden;
 }
 
 .movie {
@@ -226,3 +247,5 @@ img {
     margin-right:0.6rem;
     font-size:16px;
 }
+
+
