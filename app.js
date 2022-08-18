@@ -2,7 +2,7 @@ const APIKEY = "a268923f";
 
 const searchInput = document.querySelector(".search-input");
 const moviesContainer = document.querySelector(".movies-container");
-const watchIconContainer = document.querySelector(".watch-icon-container");
+const videoIconContainer = document.querySelector(".watch-icon-container");
 const errorMessage = document.querySelector('.error-message');
 
 let moviesArr = [];
@@ -67,7 +67,7 @@ async function getMovieId(movieName) {
   // IF there are too many results or the movie is not found
   if (responseMessage !== "False") {
     // 1- Hide Watch Icon And Error Message 
-    hideElements(watchIconContainer, errorMessage);
+    hideElements(videoIconContainer, errorMessage);
 
     // 2- Display Movie COntainer
     showElements(moviesContainer);
@@ -85,7 +85,7 @@ async function getMovieId(movieName) {
   } else if(responseMessage === 'False') {
     // Hide Watch - movies continer And Show Error Message And Change Input Value
     // 1- Hide Watch Icon & Movies Container
-    hideElements(watchIconContainer, moviesContainer);
+    hideElements(videoIconContainer, moviesContainer);
 
     // 2-Show Error Message 
     showElements(errorMessage);
@@ -146,7 +146,7 @@ function buildMoviesHTML() {
     const moviesHTML = moviesArr.map((singleMovie) => {
       const {imdbID,poster,  Title, imdbRating, Runtime, Genre,Plot} = singleMovie;
       return `
-      <div class="movie">
+      <div class="movie" id="${imdbID}">
       <img src="${poster}" alt="${Title}" class="movie-img">
       <div class="movie-content">
           <h3 class="movie-title">${Title} <span class="movie-star">&starf;</span>  <span class="movie-rate">${imdbRating}</span></h3>
@@ -179,28 +179,23 @@ if(localStorage.getItem('movies') ) {
   watchlistArr = [];
 }
 
+
+// Add To Watch List Button Logic
 moviesContainer.addEventListener('click', (e) => {
-    const buttonWasClicked = e.target.classList.contains('btn-watchlist') || e.target.classList.contains('plus-icon')
-    if(buttonWasClicked ) {
+    const addToWatchlistClicked = e.target.classList.contains('btn-watchlist') || e.target.classList.contains('plus-icon');
+    if(addToWatchlistClicked) {
+        // 1-Extract This specific movie element 
+        let movieElement = e.target.parentElement.parentElement.parentElement.outerHTML;
+        
+        // 2-Replace + Watchlist With - Remove
+        movieElement = movieElement.replace(`<i class="fa-solid fa-circle-plus plus-icon"></i> Watchlist`, `<i class="fa-solid fa-circle-minus"></i> Remove`)
 
-        // watchlistArr.push(e.target.parentElement.parentElement.parentElement)
-        // console.dir(e.target.parentElement.parentElement.parentElement)
-        const movieElement = e.target.parentElement.parentElement.parentElement.innerHTML;
-        let movieHTML = `<div class="movie">${movieElement}</div>`
+        // 3-Push This New Element To Watch List Arr
+        watchlistArr.push(movieElement);
 
-        movieHTML = movieHTML.replace(`<i class="fa-solid fa-circle-plus plus-icon"></i> Watchlist`, `<i class="fa-solid fa-circle-minus"></i> Remove`)
-        watchlistArr.push(movieHTML);
+        // 4-Save This Watchlist Array In Local Storage
         localStorage.setItem('movies', JSON.stringify(watchlistArr));
-
-
-
-
-
-      
-
-
     }
-
 })
 
 
@@ -209,60 +204,111 @@ const searchForm = document.querySelector('.search');
 const watchlistHeader = document.querySelector('.watchlist-header');
 const goToWatchlist = document.querySelector('#go-to-watchlist');
 const goToSearchPage = document.querySelector('#go-to-search');
-const watchlistContent = document.querySelector('.watchlist-content');
-const watchlistContainer = document.querySelector('.watchlist-container')
+const watchlistDefaultText = document.querySelector('.watchlist-content');
+const watchlistMoviesContainer = document.querySelector('.watchlist-container')
 
+// If My Watchlist button Was Clicked
 goToWatchlist.addEventListener('click', () => {
-  // Hide Search Header - Search Input & Watchlist Icon Container & Movies Container
-  searchHeader.style.display = searchForm.style.display = watchIconContainer.style.display = moviesContainer.style.display = 'none';
+  // 1- Hide ( Search Header - Search Input - Video Icon Container - Movies Container )
+  hideElements(searchHeader, searchForm, videoIconContainer, moviesContainer);
+
+  // 2- Show ( Watchlist Header - Watchlist Default Text - Watchlist Container )
+  showElements(watchlistHeader, watchlistDefaultText, watchlistMoviesContainer);
 
 
-  // Show Watchlist Header & Watchlist Content & Watchlist Container
-  watchlistHeader.style.display = watchlistContent.style.display = watchlistContainer.style.display =  'block';
-
-  let htmlMovie = '';
+  renderWatchListMovies();
 
 
+})
+
+function renderWatchListMovies() {
+  let htmlMovies = '';
+  // If There Are Movies In The Watch List Arr 
   if(watchlistArr.length ) {
-    watchlistContent.style.display = 'none';
+    // 1- Hide Watch List Default Content
+    watchlistDefaultText.style.display = 'none';
 
 
-
-
+    // 2- Loop Through Watchlist Movies
     for(let movie of watchlistArr) {
-       htmlMovie += movie; 
+       htmlMovies += movie; 
       
     }
-    watchlistContainer.innerHTML = htmlMovie;
+    // Insert This Movie HTML Into Watch List Movies Container Out Of The Loop For Perfomance
+    watchlistMoviesContainer.innerHTML = htmlMovies;
+    // If There are no movies in the watch list arr
+  } else {
+    // Hide The Watch List Movies Container And Show The Default Content
+    hideElements(watchlistMoviesContainer);
+    showElements(watchlistDefaultText);
   }
 
+}
+
+function backToMovies() {
+// 1- Hide ( Watchlist Header - Watch List Default Content - Watch List Movies Container ) 
+hideElements(watchlistHeader, watchlistDefaultText, watchlistMoviesContainer);
+
+// 2- ( Show Search Header - Search Input - Video Icon Container ) 
+showElements(searchHeader, searchForm, videoIconContainer);
+
+
+// If there are movies searched then hide video icon container and show movies container
+if(moviesArr.length) {
+ // 1- Hide Video Icon 
+ hideElements(videoIconContainer);
+
+ // 2- Show Movies Container
+ showElements(moviesContainer);
+ // If There Are No Movies Searched Yet
+} else {
+ // Show Video Icon Container 
+ showElements(videoIconContainer);
+}
+}
+
+// If Search For Movies Button Was Clicked
+goToSearchPage.addEventListener('click', backToMovies);
+
+// If Lets Add Some Movies Link Was Clicked
+document.querySelector('.watchlist-link').addEventListener('click', backToMovies);
+
+
+// - Remove Button Was Clicked
+watchlistMoviesContainer.addEventListener('click', (e) => {
+  const removeFromWatchlistClicked = e.target.classList.contains('btn-watchlist') || e.target.classList.contains('fa-circle-minus');
+
+  if(removeFromWatchlistClicked) {
+
+    // 1- Extract Movie ID
+    const movieId = e.target.parentElement.parentElement.parentElement.id;
+  
+    // 2- Get The Index Of The Movie That Was Clicked 
+    const movieIndex = watchlistArr.findIndex((movie) => {
+      return movie.includes(movieId);
+    })
+    
+
+
+
+    // 3- Remove That Specific Movie Index From The Array
+
+    watchlistArr.splice(movieIndex, 1);
+
+
+    // 4- Update Movies Arr In Local Storage
+    localStorage.setItem('movies', JSON.stringify(watchlistArr));
+
+    // 5- Re Render Watch List Movies
+    renderWatchListMovies()
+
+
+
+ 
+
+   
+
+  }
 
 })
 
-goToSearchPage.addEventListener('click', () => {
-    // Hide Watchlist Header & Watchlist Content & Watchlist Container
-    watchlistHeader.style.display = watchlistContent.style.display =  watchlistContainer.style.display = 'none';
-
-
-  // Show Search Header - Search Input & Watchlist Icon Container & Watchlist Container
-  searchHeader.style.display = searchForm.style.display = watchIconContainer.style.display = 'block';
-
-  if(moviesHTML !== '') {
-    // hide watch icon and show movies container
-    watchIconContainer.style.display = 'none';
-    moviesContainer.style.display = 'block';
-  }
-
-
-})
-
-
-watchlistContainer.addEventListener('click', (e) => {
-  const buttonWasClicked = e.target.classList.contains('btn-watchlist') || e.target.classList.contains('fa-circle-minus')
-  if(buttonWasClicked ) {
-    console.log('remove item now');
-    console.log(e.target.parentElement.parentElement.parentElement)
-    // console.log(JSON.parse(localStorage.getItem('movies')));
-  }
-
-})
