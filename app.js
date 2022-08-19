@@ -219,9 +219,7 @@ moviesContainer.addEventListener("click", (e) => {
     // 4-Save This Watchlist Array In Local Storage
     localStorage.setItem("movies", JSON.stringify(watchlistArr));
 
-    // const alertText = document.querySelector('.alert');
-    // alertText.style.visibility = 'visible';
-    // console.log(movieElement);
+   
 
   }
   
