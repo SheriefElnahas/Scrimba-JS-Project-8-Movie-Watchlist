@@ -137,9 +137,8 @@ function buildMoviesHTML() {
       const { imdbID, poster, Title, imdbRating, Runtime, Genre, Plot } =
         singleMovie;
       return `
-      <div class="movie-container">
-
       <div class="movie" id="${imdbID}">
+
       <img src="${poster}" alt="${Title}" class="movie-img">
       <div class="movie-content">
 
@@ -150,9 +149,10 @@ function buildMoviesHTML() {
               <button class="btn-watchlist"><i class="fa-solid fa-circle-plus plus-icon"></i> Watchlist</button>
           </div>
           <p class="movie-description">${Plot}</p>
+          <p class="alert">Movie Was Added!</p>
       </div>
       </div>
-      </div>
+
       `;
     })
     .join("");
@@ -177,20 +177,27 @@ if (localStorage.getItem("movies")) {
 moviesContainer.addEventListener("click", (e) => {
   const addToWatchlistClicked = e.target.classList.contains("btn-watchlist") || e.target.classList.contains("plus-icon");
   if (addToWatchlistClicked) {
+    // Extract Movie Target
+    const targetElement = e.target.parentElement.parentElement.parentElement;
+
+    // Extract The Alert Text From That Specific Element
+    const alertText = targetElement.children[1].children[3];
+
+    // Show The Alert Text After The Movie Is Added To The Watchlist
+    alertText.style.visibility = 'visible';
+  
+
     // 1-Extract This specific movie HTML element
-    let movieElement = e.target.parentElement.parentElement.parentElement.outerHTML;
-    
+    let movieElement = targetElement.outerHTML;
+
     // Extract Movie Id
-    const movieId = e.target.parentElement.parentElement.parentElement.id
+    const movieId = targetElement.id
 
-
-
-    // 2-Replace + Watchlist With - Remove
+    // 2-Replace + Watchlist to - Remove & Remove Movie Was Added Text
     movieElement = movieElement.replace('<i class="fa-solid fa-circle-plus plus-icon"></i> Watchlist','<i class="fa-solid fa-circle-minus"></i> Remove');
-
-
+    movieElement = movieElement.replace('<p class="alert" style="visibility: visible;">Movie Was Added!</p>', ' ');
+    
     // 3-Push This New Element To Watch List Arr
-    // watchlistArr.push(movieElement);
 
     // If Array Is Empty Then Push The Movie To The array
     if(watchlistArr.length === 0) {
@@ -209,29 +216,16 @@ moviesContainer.addEventListener("click", (e) => {
 
     }
 
-
-
-     
-    
-
-    // If Watchlist arr is empty then push the item 
-    // IF Watchlist is not empty
-      // 1-loop through these movie
-         // 1-If any movie has the same id then dont add it 
-         // 2- add the item
-    
-
-
-
-    
-
-
     // 4-Save This Watchlist Array In Local Storage
     localStorage.setItem("movies", JSON.stringify(watchlistArr));
-    
 
+    // const alertText = document.querySelector('.alert');
+    // alertText.style.visibility = 'visible';
+    // console.log(movieElement);
 
   }
+  
+
 });
 
 const searchHeader = document.querySelector(".search-header");

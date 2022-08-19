@@ -145,28 +145,40 @@ img {
     display:none;
 }
 
+
+
 .alert {
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
-  font-size:12px;
+  font-size:10px;
   letter-spacing: 1px;
   background:orange;
-  width:40%;
-  margin:0 auto;
+
   padding:0.3rem;
+  margin-top:1rem;
   border-radius: 10px;
   visibility: hidden;
+
 }
 
 .movie {
   display: flex;
   border-bottom: 3px solid #e5e7eb;
   padding: 2rem 0;
+
 }
-.movie:last-of-type {
+/* .movie:last-of-type {
   border-bottom: none;
   padding-bottom: 1rem;
+} */
+.movie:only-child {
+  border-bottom:none;
+  padding-bottom:1rem;
+}
+.movie:last-child {
+  border-bottom:none;
+  padding-bottom:1rem;
 }
 
 .movie-img {
